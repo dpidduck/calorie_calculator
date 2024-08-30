@@ -1,9 +1,7 @@
+
 from datetime import datetime, timedelta
 
 def calculate_bmr(cisgender, weight, height, age):
-    """
-    Calculate the Basal Metabolic Rate (BMR) based on gender, weight, height, and age.
-    """
     if cisgender.lower() == "m":
         bmr = 66 + (6.23 * weight) + (12.7 * height) - (6.8 * age)
     elif cisgender.lower() == "f":
@@ -14,9 +12,6 @@ def calculate_bmr(cisgender, weight, height, age):
     return bmr
 
 def calculate_tdee(bmr):
-    """
-    Calculate the Total Daily Energy Expenditure (TDEE) based on activity level.
-    """
     activity_levels = {
         "1": 1.2,    # Sedentary
         "2": 1.375,  # Lightly active
@@ -40,16 +35,10 @@ def calculate_tdee(bmr):
     return tdee
 
 def calculate_bmi(weight, height):
-    """
-    Calculate the Body Mass Index (BMI) based on weight and height.
-    """
     bmi = (weight * 703) / (height ** 2)
     return bmi
 
 def bmi_category(bmi):
-    """
-    Determine the BMI category based on the BMI value.
-    """
     if bmi < 18.5:
         return "underweight"
     elif 18.5 <= bmi < 24.9:
@@ -60,9 +49,6 @@ def bmi_category(bmi):
         return "obese"
 
 def calculate_ideal_body_weight(cisgender, height):
-    """
-    Calculate the Ideal Body Weight (IBW) using the Hamwi Formula.
-    """
     if cisgender.lower() == "m":
         ibw_kg = 48 + 2.7 * (height - 60)
     elif cisgender.lower() == "f":
@@ -74,9 +60,6 @@ def calculate_ideal_body_weight(cisgender, height):
     return ibw_lbs
 
 def calculate_future_date(weeks):
-    """
-    Calculate the future date that is a certain number of weeks away.
-    """
     start_date = datetime.now()
     target_date = start_date + timedelta(weeks=weeks)
     return target_date
@@ -106,15 +89,27 @@ def main():
     ideal_body_weight = calculate_ideal_body_weight(cisgender, height)
     print(f"\nYour ideal weight using the Hamwi Formula is approximately {round(ideal_body_weight)} lbs.")
     
-    # Calculate weight loss duration and target date
-    target_weeks = (weight - ideal_body_weight) / 2
-    target_date = calculate_future_date(target_weeks)
-    print(f"If you lose 2 lbs per week, it will take you {round(target_weeks)} weeks to reach your Ideal Body Weight.")
-    print(f"Your target date is {target_date.strftime('%B %d, %Y')}.")
-
-    # Daily caloric deficit
-    daily_deficit = 1000  # To lose 2 lbs per week
-    print(f"\nTo lose 2 lbs per week, you will need to consume {round(tdee - daily_deficit)} calories per day.")
+    if bmi_category_description == "underweight":
+        # Recommend weight gain
+        print("\nSince you are underweight, it is recommended that you gain weight.")
+        target_weeks = (ideal_body_weight - weight) / 2
+        print(f"If you gain 2 lbs per week, it will take you {round(target_weeks)} weeks to reach your Ideal Body Weight.")
+        target_date = calculate_future_date(target_weeks)
+        print(f"Your target date is {target_date.strftime('%B %d, %Y')}.")
+        daily_surplus = 1000  # To gain 2 lbs per week
+        print(f"\nTo gain 2 lbs per week, you will need to consume {round(tdee + daily_surplus)} calories per day.")
+    
+    else:
+        # Recommend weight loss or maintenance
+        target_weeks = (weight - ideal_body_weight) / 2
+        if target_weeks > 0:
+            print(f"If you lose 2 lbs per week, it will take you {round(target_weeks)} weeks to reach your Ideal Body Weight.")
+            target_date = calculate_future_date(target_weeks)
+            print(f"Your target date is {target_date.strftime('%B %d, %Y')}.")
+            daily_deficit = 1000  # To lose 2 lbs per week
+            print(f"\nTo lose 2 lbs per week, you will need to consume {round(tdee - daily_deficit)} calories per day.")
+        else:
+            print("You are at or close to your ideal weight. Maintenance is recommended.")
 
 if __name__ == "__main__":
     main()
