@@ -1,3 +1,7 @@
+# Title: Calorie Calculator
+# Author; Dennis Pidduck
+# Date: 29 August 2024
+# Purpose: Calculates calorie needs based on height, weight, age, and activity level
 
 from datetime import datetime, timedelta
 
